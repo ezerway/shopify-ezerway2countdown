@@ -18,7 +18,7 @@ export default class AnnotatedLayout extends React.Component {
                         description="Add a product to Sample App, it will automatically be discounted."
                     >
                         <Card sectioned>
-                            <Form onSubmit={this.handleChange}>
+                            <Form onSubmit={this.handleSubmit}>
                                 <FormLayout>
                                     <TextField
                                         label="Discount percentage"
