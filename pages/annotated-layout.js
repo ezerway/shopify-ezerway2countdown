@@ -2,14 +2,18 @@ import React from "react";
 import {
     Page, Layout, Card,
     Form, FormLayout,
-    Button, Stack, TextField
+    Button, Stack, TextField,
+    SettingToggle, TextStyle
 } from '@shopify/polaris';
 
 export default class AnnotatedLayout extends React.Component {
     state = {
-        discount: '10%'
+        discount: '10%',
+        enabled: false
     }
     render() {
+        const { enabled, discount } = this.state;
+        const textStatus = enabled ? 'enable' : 'disable';
         return (
             <Page>
                 <Layout>
@@ -22,7 +26,7 @@ export default class AnnotatedLayout extends React.Component {
                                 <FormLayout>
                                     <TextField
                                         label="Discount percentage"
-                                        value={this.state.discount}
+                                        value={discount}
                                         type="discount"
                                         onChange={this.handleChange('discount')}
                                     />
@@ -32,6 +36,19 @@ export default class AnnotatedLayout extends React.Component {
                                 </FormLayout>
                             </Form>
                         </Card>
+                    </Layout.AnnotatedSection>
+                    <Layout.AnnotatedSection
+                        title="Price updates"
+                        description="Temporarily disable all Sample App price updates"
+                    >
+                        <SettingToggle action={{
+                            content: _.capitalize(textStatus),
+                            onAction: this.handleToggle
+                        }}
+                        enabled={enabled}>
+                            This setting is{' '}
+                            <TextStyle variation={'strong'}>{textStatus}</TextStyle>
+                        </SettingToggle>
                     </Layout.AnnotatedSection>
                 </Layout>
             </Page>
@@ -43,5 +60,8 @@ export default class AnnotatedLayout extends React.Component {
     }
     handleChange = (field) => {
         return (value) => this.setState({ [field]: value })
+    }
+    handleToggle = () => {
+        this.setState({ enable: !this.state.enabled })
     }
 }
