@@ -23,6 +23,7 @@
   },
   "homepage": "https://github.com/ezerway/shopify-ezerway2countdown#readme",
   "dependencies": {
+    "@shopify/app-bridge-react": "^1.30.0",
     "@shopify/koa-shopify-auth": "^4.1.3",
     "@shopify/polaris": "^6.3.0",
     "dotenv": "^8.2.0",
