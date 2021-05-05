@@ -6,7 +6,6 @@ const Index = () => {
         <Page>
             <Layout>
                 <EmptyState
-                    image={img}
                     heading={'Discount your products temporarily'}
                     action={{
                         content: 'Select product',
@@ -14,6 +13,7 @@ const Index = () => {
                             console.log('OK')
                         }
                     }}
+                    image={img}
                 >
                     <p>Select products to change their price temporarily.</p>
                 </EmptyState>
