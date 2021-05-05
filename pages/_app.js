@@ -25,10 +25,10 @@ class MyApp extends App {
     }
 }
 
-MyApp.getInitialProps = async (({ ctx }) => {
+MyApp.getInitialProps = async ({ ctx }) => {
     return {
         shopOrigin: ctx.query.shop
     }
-})
+};
 
 export default MyApp;
