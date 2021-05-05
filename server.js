@@ -35,14 +35,14 @@ app.prepare().then(() => {
         afterAuth(ctx) {
             const { shop, scope } = ctx.state.shopify;
             ACTIVE_SHOPIFY_SHOPS[shop] = scope;
-            ctx.redirect('/');
+            ctx.redirect(`/?shop=${shop}`);
         }
     }))
 
     const handleRequest = async (ctx) => {
         await handle(ctx.req, ctx.res);
         ctx.respond = false;
-        ctx.respond.statusCode = 200;
+        ctx.res.statusCode = 200;
     }
 
     router.get('/', ctx => {
@@ -55,7 +55,7 @@ app.prepare().then(() => {
 
 
     router.get('(/_next/static/.*)', handleRequest);
-    router.get('(/_next/webpack-hrm)', handleRequest);
+    router.get('(/_next/webpack-hmr)', handleRequest);
     router.get('(.*)', verifyRequest(), handleRequest);
 
     server.use(router.allowedMethods());
