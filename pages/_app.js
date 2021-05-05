@@ -3,8 +3,11 @@ import App from 'next/app';
 import Head from 'next/head';
 import { Provider } from '@shopify/app-bridge-react';
 import { AppProvider } from '@shopify/polaris';
+import ClientRouter  from '../components/ClientRouter';
+
 import translations from '@shopify/polaris/locales/en.json';
 import '@shopify/polaris/dist/styles.css';
+
 class MyApp extends App {
     render() {
         const { Component, pageProps, shopOrigin } = this.props;
@@ -16,6 +19,7 @@ class MyApp extends App {
                     <meta charSet="utf-8"/>
                 </Head>
                 <Provider config={config}>
+                    <ClientRouter />
                     <AppProvider i18n={translations}>
                         <Component {...pageProps}/>
                     </AppProvider>
