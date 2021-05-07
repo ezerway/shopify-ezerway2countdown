@@ -38,13 +38,15 @@ const GET_PRODUCTS_BY_ID = gql`
 class ResourceListWithProduct extends React.Component {
     static contextType = Context;
 
-    gotoEditPage = () => {
-        const app = this.context;
-        const redirect = Redirect.create(app);
-        redirect.dispatch(Redirect.Action.APP, '/edit-product');
-    }
-
     render() {
+        const app = this.context;
+        const redirectToProduct = () => {
+          const redirect = Redirect.create(app);
+          redirect.dispatch(
+              Redirect.Action.APP,
+              '/edit-products',
+          );
+        };
         const twoWeeksFromNow = new Date(Date.now() + 12096e5).toDateString();
         const ids = store.get('ids');
         return (
@@ -77,7 +79,7 @@ class ResourceListWithProduct extends React.Component {
                                             accessibilityLabel={`View details for ${item.title}`}
                                             onClick={() => {
                                                 store.set('item', item);
-                                                this.gotoEditPage();
+                                                redirectToProduct();
                                             }}
                                         >
                                             <Stack>
