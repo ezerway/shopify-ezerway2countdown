@@ -6,7 +6,7 @@ import {
 } from '@shopify/polaris';
 import { Mutation } from 'react-apollo';
 import store from "store-js";
-import { Context } from '@shopify/app-bridge-react';
+import {Context, useAppBridge} from '@shopify/app-bridge-react';
 import { Redirect } from '@shopify/app-bridge/actions';
 
 const UPDATE_PRICE = gql`
@@ -37,10 +37,11 @@ class EditProducts extends React.Component {
 
     render() {
         const { name, price, discount, variantId } = this.state;
-        const app = this.context;
+        // const app = this.context;
+        const app = useAppBridge();
+        const redirect = Redirect.create( app );
+
         const redirectToHome = () => {
-            const redirect = Redirect.create(app);
-            console.log(app)
             redirect.dispatch(Redirect.Action.APP, '/index');
         }
 
