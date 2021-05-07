@@ -6,8 +6,9 @@ import {
 } from '@shopify/polaris';
 import { Mutation } from 'react-apollo';
 import store from "store-js";
-import {Context, useAppBridge} from '@shopify/app-bridge-react';
+import { Context } from '@shopify/app-bridge-react';
 import { Redirect } from '@shopify/app-bridge/actions';
+import NextLink from 'next/link'
 
 const UPDATE_PRICE = gql`
 mutation productVariantUpdate($input: ProductVariantInput!) {
@@ -37,11 +38,9 @@ class EditProducts extends React.Component {
 
     render() {
         const { name, price, discount, variantId } = this.state;
-        // const app = this.context;
-        const app = useAppBridge();
-        const redirect = Redirect.create( app );
-
+        const app = this.context;
         const redirectToHome = () => {
+            const redirect = Redirect.create(app);
             redirect.dispatch(Redirect.Action.APP, '/index');
         }
 
@@ -53,6 +52,7 @@ class EditProducts extends React.Component {
                         <Frame>
                             <Page>
                                 <Layout>
+                                    <NextLink href="/index">Go to test page</NextLink>
                                     { (data && data?.productVariantUpdate) ? (<Toast content="Sucessfully updated"/>) : null }
                                     <Layout.Section>
                                         { error ? (<Banner status="critical">{error.message}</Banner>) : null }
