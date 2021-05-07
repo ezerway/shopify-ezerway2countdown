@@ -24,7 +24,7 @@ mutation productVariantUpdate($input: ProductVariantInput!) {
 `;
 
 class EditProducts extends React.Component {
-    static contentType = Context;
+    static contextType = Context;
     state = {
         variantId: '',
         name: '',
