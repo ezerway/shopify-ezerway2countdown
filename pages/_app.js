@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import App  from 'next/app';
 import Head from 'next/head';
-import {Provider, RoutePropagator, useAppBridge} from '@shopify/app-bridge-react';
+import {Provider, useAppBridge} from '@shopify/app-bridge-react';
 import { Redirect } from '@shopify/app-bridge/actions';
 import { authenticatedFetch } from '@shopify/app-bridge-utils';
 import { AppProvider } from '@shopify/polaris';
