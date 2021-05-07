@@ -86,7 +86,7 @@ class EditProducts extends React.Component {
                                                 secondaryActions={[
                                                     {
                                                         content: 'Close',
-                                                        action: goHome
+                                                        onAction: goHome
                                                     }
                                                 ]}
                                             />
