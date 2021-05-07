@@ -37,9 +37,8 @@ class EditProducts extends React.Component {
 
     render() {
         const { name, price, discount, variantId } = this.state;
-
-        const goHome = () => {
-            const app = this.context;
+        const app = this.context;
+        const redirectToHome = () => {
             const redirect = Redirect.create(app);
             redirect.dispatch(Redirect.Action.APP, '/index');
         }
@@ -86,7 +85,7 @@ class EditProducts extends React.Component {
                                                 secondaryActions={[
                                                     {
                                                         content: 'Close',
-                                                        onAction: goHome
+                                                        onAction: redirectToHome
                                                     }
                                                 ]}
                                             />
