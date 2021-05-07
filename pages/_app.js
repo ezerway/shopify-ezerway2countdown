@@ -12,8 +12,13 @@ import { ApolloProvider } from 'react-apollo';
 import translations from '@shopify/polaris/locales/en.json';
 import '@shopify/polaris/dist/styles.css';
 
+const myFetch = (url, options) => {
+    console.log(url, options);
+    return fetch(url, options);
+};
+
 function userLoggedInFetch(app) {
-    const fetchFunction = authenticatedFetch(app);
+    const fetchFunction = authenticatedFetch(app, myFetch);
 
     return async (uri, options) => {
         const response = fetchFunction(uri, options);
