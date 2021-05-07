@@ -13,7 +13,8 @@ import translations from '@shopify/polaris/locales/en.json';
 import '@shopify/polaris/dist/styles.css';
 
 const myFetch = (url, options) => {
-    console.log(url, options);
+    delete options.signal;
+    console.log(options);
     return fetch(url, options);
 };
 
