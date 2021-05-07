@@ -37,7 +37,6 @@ class ResourceListWithProduct extends React.Component {
     render() {
         const twoWeeksFromNow = new Date(Date.now() + 12096e5).toDateString();
         const ids = store.get('ids');
-        console.log(ids)
 
         return (
             <Query query={GET_PRODUCTS_BY_ID} variables={{ ids }}>

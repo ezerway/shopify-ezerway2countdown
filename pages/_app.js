@@ -21,7 +21,7 @@ function userLoggedInFetch(app) {
     const fetchFunction = authenticatedFetch(app, myFetch);
 
     return async (uri, options) => {
-        const response = fetchFunction(uri, options);
+        const response = await fetchFunction(uri, options);
 
         if (response.headers.get('X-Shopify-API-Request-Failure-Reauthorize') === '1') {
             const authUrlHeader = response.headers.get('X-Shopify-API-Request-Failure-Reauthorize-Url');
@@ -29,6 +29,7 @@ function userLoggedInFetch(app) {
             redirect.dispatch(Redirect.Action.APP, authUrlHeader || '/auth');
             return null;
         }
+        return response;
     }
 }
 
