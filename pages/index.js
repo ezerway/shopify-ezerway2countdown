@@ -3,6 +3,8 @@ import {
     Page, Layout, EmptyState,
 } from '@shopify/polaris';
 import { ResourcePicker, TitleBar } from '@shopify/app-bridge-react';
+import store from 'store-js';
+import ResourceListWithProduct from "../components/ResourceList";
 
 const img = 'https://cdn.shopify.com/s/files/1/0757/9955/files/empty-state.svg';
 
@@ -12,6 +14,7 @@ class Index extends React.Component {
     }
     render() {
         const { open } = this.state;
+        const isEmpty = !store.get('ids');
         return (
             <Page>
                 <TitleBar title={'Ezerway 2 countdown'} primaryAction={{
@@ -21,26 +24,32 @@ class Index extends React.Component {
                 <ResourcePicker resourceType={'Product'} open={open}
                                 onSelection={this.handleSelection}
                                 onCancel={this.closeResourcePicker}/>
-                <Layout>
-                    <EmptyState
-                        heading={'Discount your products temporarily'}
-                        action={{
-                            content: 'Select product',
-                            onAction: this.openResourcePicker
-                        }}
-                        image={img}
-                    >
-                        <p>Select products to change their price temporarily.</p>
-                    </EmptyState>
-                </Layout>
+                {
+                    isEmpty ? (<ResourceListWithProduct />) : (
+                        <Layout>
+                            <EmptyState
+                                heading={'Discount your products temporarily'}
+                                action={{
+                                    content: 'Select product',
+                                    onAction: this.openResourcePicker
+                                }}
+                                image={img}
+                            >
+                                <p>Select products to change their price temporarily.</p>
+                            </EmptyState>
+                        </Layout>
+                    )
+                }
             </Page>
         )
     }
     openResourcePicker = () => this.setState({ open: true });
     closeResourcePicker = () => this.setState({ open: false });
     handleSelection = (resources) => {
+        const idsFromResources = resources.selection.map((product) => product.id);
         this.closeResourcePicker();
-        console.log(resources)
+        store.set('ids', idsFromResources);
+        console.log(idsFromResources)
     }
 }
 
