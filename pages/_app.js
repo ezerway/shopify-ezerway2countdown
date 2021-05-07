@@ -1,13 +1,14 @@
 import React, { Fragment } from 'react';
 import App  from 'next/app';
 import Head from 'next/head';
-import { Provider, Context } from '@shopify/app-bridge-react';
+import {Provider, RoutePropagator, useAppBridge} from '@shopify/app-bridge-react';
 import { Redirect } from '@shopify/app-bridge/actions';
 import { authenticatedFetch } from '@shopify/app-bridge-utils';
 import { AppProvider } from '@shopify/polaris';
-import ClientRouter   from '../components/ClientRouter';
 import ApolloClient from 'apollo-boost';
 import { ApolloProvider } from 'react-apollo';
+import ClientRouter from '../components/ClientRouter';
+import RoutePropagator from '../components/RoutePropagator';
 
 import translations from '@shopify/polaris/locales/en.json';
 import '@shopify/polaris/dist/styles.css';
@@ -33,23 +34,20 @@ function userLoggedInFetch(app) {
     }
 }
 
-class MyProvider extends React.Component {
-    static contextType = Context;
-    render() {
-        const app = this.context;
-
-        const client = new ApolloClient({
-            fetch: userLoggedInFetch(app),
-            fetchOptions: {
-                credentials: 'include'
-            }
-        })
-        return (
-            <ApolloProvider client={client}>
-                {this.props.children}
-            </ApolloProvider>
-        );
-    }
+const MyProvider = (props) => {
+    const app = useAppBridge();
+    const client = new ApolloClient({
+        fetch: userLoggedInFetch(app),
+        fetchOptions: {
+            credentials: 'include'
+        }
+    })
+    const Component = props.Component;
+    return (
+        <ApolloProvider client={client}>
+            <Component {...props} />
+        </ApolloProvider>
+    );
 }
 
 class MyApp extends App {
@@ -62,14 +60,13 @@ class MyApp extends App {
                     <title>Ezerway 2 Countdown</title>
                     <meta charSet="utf-8"/>
                 </Head>
-                <Provider config={config}>
-                    <ClientRouter />
-                    <AppProvider i18n={translations}>
-                        <MyProvider>
-                            <Component {...pageProps}/>
-                        </MyProvider>
-                    </AppProvider>
-                </Provider>
+                <AppProvider i18n={translations}>
+                    <Provider config={config}>
+                        <ClientRouter />
+                        <RoutePropagator />
+                        <MyProvider Component={Component} {...pageProps}/>
+                    </Provider>
+                </AppProvider>
             </Fragment>
         );
     }
