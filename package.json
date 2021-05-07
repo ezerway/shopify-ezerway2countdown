@@ -1,17 +1,27 @@
 {
-  "name": "sample-embedded-app",
+  "name": "shopify-ezerway2countdown",
   "version": "1.0.0",
-  "description": "[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE.md)",
-  "main": "index.js",
+  "description": "",
+  "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "node server.js",
     "build": "next build",
-    "start": "NODE_ENV=production node server.js"
+    "start": "next build && NODE_ENV=production node server.js"
   },
-  "keywords": [],
-  "author": "",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ezerway/shopify-ezerway2countdown.git"
+  },
+  "engines": {
+    "node": "12.x"
+  },
+  "author": "ezerway <faq.ezerway@gmail.com>",
   "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ezerway/shopify-ezerway2countdown/issues"
+  },
+  "homepage": "https://github.com/ezerway/shopify-ezerway2countdown#readme",
   "dependencies": {
     "@shopify/app-bridge-react": "^1.28.0",
     "@shopify/app-bridge-utils": "^1.29.0",
