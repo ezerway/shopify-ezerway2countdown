@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import gql from 'graphql-tag';
 import {
     Frame, Page, Layout, Banner, Toast, Form, FormLayout, Card,
@@ -6,9 +6,8 @@ import {
 } from '@shopify/polaris';
 import { Mutation } from 'react-apollo';
 import store from "store-js";
-import { Context } from '@shopify/app-bridge-react';
+import {Context, useAppBridge} from '@shopify/app-bridge-react';
 import { Redirect } from '@shopify/app-bridge/actions';
-import NextLink from 'next/link'
 
 const UPDATE_PRICE = gql`
 mutation productVariantUpdate($input: ProductVariantInput!) {
@@ -24,95 +23,84 @@ mutation productVariantUpdate($input: ProductVariantInput!) {
   }
 `;
 
-class EditProducts extends React.Component {
-    static contextType = Context;
-    state = {
+const EditProducts = () => {
+    const [state, setState] = useState({
         variantId: '',
         name: '',
         price: '',
         discount: '',
+    });
+    const app = useAppBridge();
+    const redirectToHome = () => {
+        const redirect = Redirect.create(app);
+        redirect.dispatch(Redirect.Action.APP, '/index');
     }
-    componentDidMount() {
-        this.setState({ discount: this.itemToBeConsumed() })
+    const handleChange = (field) => {
+        return (value) => setState({  ...state ,[field]: value })
     }
-
-    render() {
-        const { name, price, discount, variantId } = this.state;
-        const app = this.context;
-        const redirectToHome = () => {
-            const redirect = Redirect.create(app);
-            redirect.dispatch(Redirect.Action.APP, '/index');
-        }
-
-        return (
-            <Mutation mutation={UPDATE_PRICE}>
-                {(mutateFunction, { data, error }) => {
-
-                    return (
-                        <Frame>
-                            <Page>
-                                <Layout>
-                                    <NextLink href="/index">Go to test page</NextLink>
-                                    { (data && data?.productVariantUpdate) ? (<Toast content="Sucessfully updated"/>) : null }
-                                    <Layout.Section>
-                                        { error ? (<Banner status="critical">{error.message}</Banner>) : null }
-                                    </Layout.Section>
-                                    <Layout.Section>
-                                        <DisplayText size="large">{name}</DisplayText>
-                                        <Form>
-                                            <Card sectioned>
-                                                <FormLayout>
-                                                    <FormLayout.Group>
-                                                        <TextField prefix="$" type="price" label="Original price" value={price} readOnly/>
-                                                        <TextField prefix="$" type="discount" label="Discounted price" value={discount} onChange={this.handleChange('discount')}/>
-                                                    </FormLayout.Group>
-                                                    <p>
-                                                        This sale price will expire in two weeks
-                                                    </p>
-                                                </FormLayout>
-                                            </Card>
-                                            <PageActions
-                                                primaryAction={[
-                                                    {
-                                                        content: 'Save',
-                                                        onAction: () => {
-                                                            const productVariableInput = {
-                                                              id: variantId,
-                                                              price: discount
-                                                            };
-                                                            mutateFunction({ variables: { input: productVariableInput } });
-                                                        }
-                                                    }
-                                                ]}
-                                                secondaryActions={[
-                                                    {
-                                                        content: 'Close',
-                                                        onAction: redirectToHome
-                                                    }
-                                                ]}
-                                            />
-                                        </Form>
-                                    </Layout.Section>
-                                </Layout>
-                            </Page>
-                        </Frame>
-                    )
-                }}
-            </Mutation>
-        )
-    }
-    handleChange = (field) => {
-        return (value) => this.setState({ [field]: value })
-    }
-    itemToBeConsumed = () => {
+    useEffect(() => {
         const item = store.get('item');
         const name = item.title;
         const price = item.variants.edges[0].node?.price;
         const variantId = item.variants.edges[0].node?.id;
-        this.setState({ name, price, variantId });
         const discounter = price * 0.1;
-        return (price - discounter).toFixed(2);
-    }
-}
+        setState({ name, price, variantId, discount: (price - discounter).toFixed(2) })
+    })
+    return (
+        <Mutation mutation={UPDATE_PRICE}>
+            {(mutateFunction, { data, error }) => {
+
+                return (
+                    <Frame>
+                        <Page>
+                            <Layout>
+                                { (data && data?.productVariantUpdate) ? (<Toast content="Successfully updated"/>) : null }
+                                <Layout.Section>
+                                    { error ? (<Banner status="critical">{error.message}</Banner>) : null }
+                                </Layout.Section>
+                                <Layout.Section>
+                                    <DisplayText size="large">{state.name}</DisplayText>
+                                    <Form>
+                                        <Card sectioned>
+                                            <FormLayout>
+                                                <FormLayout.Group>
+                                                    <TextField prefix="$" type="price" label="Original price" value={state.price} readOnly/>
+                                                    <TextField prefix="$" type="discount" label="Discounted price" value={state.discount} onChange={handleChange('discount')}/>
+                                                </FormLayout.Group>
+                                                <p>
+                                                    This sale price will expire in two weeks
+                                                </p>
+                                            </FormLayout>
+                                        </Card>
+                                        <PageActions
+                                            primaryAction={[
+                                                {
+                                                    content: 'Save',
+                                                    onAction: () => {
+                                                        const productVariableInput = {
+                                                            id: state.variantId,
+                                                            price: state.discount
+                                                        };
+                                                        mutateFunction({ variables: { input: productVariableInput } });
+                                                    }
+                                                }
+                                            ]}
+                                            secondaryActions={[
+                                                {
+                                                    content: 'Close',
+                                                    onAction: redirectToHome
+                                                }
+                                            ]}
+                                        />
+                                    </Form>
+                                </Layout.Section>
+                            </Layout>
+                        </Page>
+                    </Frame>
+                )
+            }}
+        </Mutation>
+    );
+};
 
 export default EditProducts;
