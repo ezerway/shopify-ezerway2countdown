@@ -6,8 +6,7 @@ import {
 } from '@shopify/polaris';
 import { Mutation } from 'react-apollo';
 import store from "store-js";
-import {useAppBridge} from '@shopify/app-bridge-react';
-import { Redirect } from '@shopify/app-bridge/actions';
+import { History } from '@shopify/app-bridge/actions';
 
 const UPDATE_PRICE = gql`
 mutation productVariantUpdate($input: ProductVariantInput!) {
@@ -37,9 +36,7 @@ class EditProducts extends React.Component {
     render() {
         const { name, price, discount, variantId } = this.state;
         const redirectToHome = () => {
-            const app = useAppBridge();
-            const redirect = Redirect.create(app);
-            redirect.dispatch(Redirect.Action.APP, '/index');
+            History.push('/index');
         }
 
         return (
