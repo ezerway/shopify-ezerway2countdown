@@ -3,6 +3,8 @@ import gql  from 'graphql-tag';
 import { Query } from 'react-apollo';
 import {Card, ResourceList, Thumbnail, Stack, TextStyle} from '@shopify/polaris';
 import store from "store-js";
+import {Context} from "@shopify/app-bridge-react";
+import {Redirect} from "@shopify/app-bridge/actions";
 
 const GET_PRODUCTS_BY_ID = gql`
   query getProducts($ids: [ID!]!) {
@@ -34,14 +36,20 @@ const GET_PRODUCTS_BY_ID = gql`
 `;
 
 class ResourceListWithProduct extends React.Component {
+    static contextType = Context;
+
+    gotoEditPage = () => {
+        const app = this.context;
+        const redirect = Redirect.create(app);
+        redirect.dispatch(Redirect.Action.APP, '/edit-product');
+    }
+
     render() {
         const twoWeeksFromNow = new Date(Date.now() + 12096e5).toDateString();
         const ids = store.get('ids');
-
         return (
             <Query query={GET_PRODUCTS_BY_ID} variables={{ ids }}>
                 {({ data, error, loading }) => {
-                    console.log(data)
                     if (loading) {
                         return  <div>Loading...</div>
                     }
@@ -67,6 +75,10 @@ class ResourceListWithProduct extends React.Component {
                                             id={item.id}
                                             media={media}
                                             accessibilityLabel={`View details for ${item.title}`}
+                                            onClick={() => {
+                                                store.set('item', item);
+                                                this.gotoEditPage();
+                                            }}
                                         >
                                             <Stack>
                                                 <Stack.Item fill>

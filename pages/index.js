@@ -49,7 +49,6 @@ class Index extends React.Component {
         const idsFromResources = resources.selection.map((product) => product.id);
         this.closeResourcePicker();
         store.set('ids', idsFromResources);
-        console.log(idsFromResources)
     }
 }
 
