@@ -34,7 +34,7 @@ const EditProducts = () => {
     const app = useAppBridge();
     const redirectToHome = () => {
         const redirect = Redirect.create(app);
-        redirect.dispatch(Redirect.Action.APP, '/index');
+        redirect.dispatch(Redirect.Action.APP, '/');
     }
     const changeDiscount = () => {
         return (value) => setDiscount(value)
