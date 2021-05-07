@@ -25,7 +25,7 @@ class Index extends React.Component {
                                 onSelection={this.handleSelection}
                                 onCancel={this.closeResourcePicker}/>
                 {
-                    isEmpty ? (<ResourceListWithProduct />) : (
+                    !isEmpty ? (<ResourceListWithProduct />) : (
                         <Layout>
                             <EmptyState
                                 heading={'Discount your products temporarily'}

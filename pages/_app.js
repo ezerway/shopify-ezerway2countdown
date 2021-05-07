@@ -14,7 +14,6 @@ import '@shopify/polaris/dist/styles.css';
 
 const myFetch = (url, options) => {
     delete options.signal;
-    console.log(options);
     return fetch(url, options);
 };
 
