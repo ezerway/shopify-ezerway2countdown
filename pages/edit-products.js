@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useState} from "react";
 import gql from 'graphql-tag';
 import {
     Frame, Page, Layout, Banner, Toast, Form, FormLayout, Card,
