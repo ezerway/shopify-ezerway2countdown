@@ -13,13 +13,8 @@ import RoutePropagator from '../components/RoutePropagator';
 import translations from '@shopify/polaris/locales/en.json';
 import '@shopify/polaris/dist/styles.css';
 
-const myFetch = (url, options) => {
-    delete options.signal;
-    return fetch(url, options);
-};
-
 function userLoggedInFetch(app) {
-    const fetchFunction = authenticatedFetch(app, myFetch);
+    const fetchFunction = authenticatedFetch(app);
 
     return async (uri, options) => {
         const response = await fetchFunction(uri, options);
